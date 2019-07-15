@@ -4,8 +4,12 @@ import 'package:giphy_picker/src/widgets/giphy_search_view.dart';
 
 class GiphySearchPage extends StatelessWidget {
   final Widget title;
+  final String searchInputMessage;
 
-  const GiphySearchPage({this.title});
+  const GiphySearchPage({
+    this.title,
+    @required this.searchInputMessage,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +29,7 @@ class GiphySearchPage extends StatelessWidget {
                 padding: EdgeInsets.only(
                   top: MediaQuery.of(context).size.height * 0.05,
                 ),
-                child: GiphySearchView(),
+                child: GiphySearchView(searchInputMessage: searchInputMessage),
               ),
             ],
           ),

@@ -22,6 +22,7 @@ class GiphyPicker {
     String lang = GiphyLanguage.english,
     Widget title,
     ErrorListener onError,
+    @required String searchInputMessage,
     @required String alertDialogTitle,
     @required String alertDialogClose,
     @required String alertDialogMessage,
@@ -32,7 +33,9 @@ class GiphyPicker {
       context,
       MaterialPageRoute(
         builder: (BuildContext context) => GiphyContext(
-            child: GiphySearchPage(),
+            child: GiphySearchPage(
+              searchInputMessage: searchInputMessage,
+            ),
             apiKey: apiKey,
             rating: rating,
             language: lang,

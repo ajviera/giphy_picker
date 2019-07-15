@@ -7,6 +7,9 @@ import 'package:giphy_picker/src/widgets/giphy_thumbnail_grid.dart';
 
 /// Provides the UI for searching Giphy gif images.
 class GiphySearchView extends StatefulWidget {
+  final String searchInputMessage;
+  GiphySearchView({@required this.searchInputMessage});
+
   @override
   _GiphySearchViewState createState() => _GiphySearchViewState();
 }
@@ -42,7 +45,9 @@ class _GiphySearchViewState extends State<GiphySearchView> {
           padding: EdgeInsets.symmetric(horizontal: 10),
           child: TextField(
             controller: _textController,
-            decoration: InputDecoration(hintText: 'Search Giphy'),
+            decoration: InputDecoration(
+              hintText: widget.searchInputMessage,
+            ),
             onChanged: (value) => _delayedSearch(giphy, value),
           ),
         ),
