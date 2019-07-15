@@ -15,38 +15,38 @@ class GiphyImage extends StatefulWidget {
   final bool renderGiphyOverlay;
 
   /// Loads an image from given url.
-  const GiphyImage(
-      {Key key,
-      @required this.url,
-      this.placeholder,
-      this.width,
-      this.height,
-      this.fit,
-      this.renderGiphyOverlay = true})
-      : super(key: key);
+  const GiphyImage({
+    Key key,
+    @required this.url,
+    this.placeholder,
+    this.width,
+    this.height,
+    this.fit,
+    this.renderGiphyOverlay = true,
+  }) : super(key: key);
 
   /// Loads the original image for given Giphy gif.
-  GiphyImage.original(
-      {Key key,
-      @required GiphyGif gif,
-      this.placeholder,
-      this.width,
-      this.height,
-      this.fit,
-      this.renderGiphyOverlay = true})
-      : url = gif.images.original.url,
+  GiphyImage.original({
+    Key key,
+    @required GiphyGif gif,
+    this.placeholder,
+    this.width,
+    this.height,
+    this.fit,
+    this.renderGiphyOverlay = true,
+  })  : url = gif.images.original.url,
         super(key: key ?? Key(gif.id));
 
   /// Loads the original still image for given Giphy gif.
-  GiphyImage.originalStill(
-      {Key key,
-      @required GiphyGif gif,
-      this.placeholder,
-      this.width,
-      this.height,
-      this.fit,
-      this.renderGiphyOverlay = true})
-      : url = gif.images.originalStill.url,
+  GiphyImage.originalStill({
+    Key key,
+    @required GiphyGif gif,
+    this.placeholder,
+    this.width,
+    this.height,
+    this.fit,
+    this.renderGiphyOverlay = true,
+  })  : url = gif.images.originalStill.url,
         super(key: key ?? Key(gif.id));
 
   @override
@@ -56,8 +56,10 @@ class GiphyImage extends StatefulWidget {
   static Future<Uint8List> load(String url, {Client client}) async {
     assert(url != null);
 
-    final response =
-        await (client ?? Client()).get(url, headers: {'accept': 'image/*'});
+    final response = await (client ?? Client()).get(
+      url,
+      headers: {'accept': 'image/*'},
+    );
 
     if (response.statusCode == 200) {
       return response.bodyBytes;
@@ -80,14 +82,21 @@ class _GiphyImageState extends State<GiphyImage> {
       future: _loadImage,
       builder: (BuildContext context, AsyncSnapshot<Uint8List> snapshot) {
         if (snapshot.hasData) {
-          final image = Image.memory(snapshot.data,
-              width: widget.width, height: widget.height, fit: widget.fit);
+          final image = Image.memory(
+            snapshot.data,
+            width: widget.width,
+            height: widget.height,
+            fit: widget.fit,
+          );
 
           if (widget.renderGiphyOverlay) {
             return GiphyOverlay(child: image);
           }
           return image;
         }
-        return widget.placeholder ?? Center(child: CircularProgressIndicator());
+        return widget.placeholder ??
+            Center(
+              child: CircularProgressIndicator(),
+            );
       });
 }

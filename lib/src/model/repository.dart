@@ -12,7 +12,10 @@ abstract class Repository<T> {
   final ErrorListener onError;
   int _totalCount;
 
-  Repository({this.pageSize, this.onError}) {
+  Repository({
+    this.pageSize,
+    this.onError,
+  }) {
     assert(pageSize != null);
     assert(onError != null);
   }
@@ -26,7 +29,8 @@ abstract class Repository<T> {
     assert(index != null);
     // index must within bounds, or 0 if totalCount is null
     assert(
-        _totalCount == null && index == 0 || index >= 0 && index < _totalCount);
+      _totalCount == null && index == 0 || index >= 0 && index < _totalCount,
+    );
 
     final value = _cache[index];
 

@@ -14,11 +14,25 @@ class GiphyPreviewPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: title, actions: <Widget>[
-          IconButton(icon: Icon(Icons.check), onPressed: () => onSelected(gif))
-        ]),
-        body: SafeArea(
-            child: Center(child: GiphyImage.original(gif: gif)),
-            bottom: false));
+      body: SafeArea(
+        child: Stack(
+          children: <Widget>[
+            IconButton(
+              icon: Icon(Icons.arrow_back_ios),
+              onPressed: () => Navigator.pop(context),
+            ),
+            Positioned(
+              right: 0.0,
+              child: IconButton(
+                icon: Icon(Icons.check),
+                onPressed: () => onSelected(gif),
+              ),
+            ),
+            Center(child: GiphyImage.original(gif: gif)),
+          ],
+        ),
+        bottom: false,
+      ),
+    );
   }
 }

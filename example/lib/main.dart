@@ -9,9 +9,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Giphy Picker Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      theme: ThemeData(primarySwatch: Colors.blue),
       home: MyHomePage(),
     );
   }
@@ -28,24 +26,33 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text(_gif?.title ?? 'Giphy Picker Demo'),
+      appBar: AppBar(
+        title: Text(_gif?.title ?? 'Giphy Picker Demo'),
+      ),
+      body: SafeArea(
+        child: Center(
+          child: _gif == null
+              ? Text('Pick a gif..')
+              : GiphyImage.original(gif: _gif),
         ),
-        body: SafeArea(
-            child: Center(
-                child: _gif == null
-                    ? Text('Pick a gif..')
-                    : GiphyImage.original(gif: _gif))),
-        floatingActionButton: FloatingActionButton(
-            child: Icon(Icons.search),
-            onPressed: () async {
-              // request your Giphy API key at https://developers.giphy.com/
-              final gif = await GiphyPicker.pickGif(
-                  context: context, apiKey: '[YOUR GIPHY APIKEY]');
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.search),
+        onPressed: () async {
+          // request your Giphy API key at https://developers.giphy.com/
+          final gif = await GiphyPicker.pickGif(
+            context: context,
+            alertDialogTitle: 'Example',
+            alertDialogMessage: 'An error occurred.',
+            alertDialogClose: "Close",
+            apiKey: '[YOUR GIPHY APIKEY]',
+          );
 
-              if (gif != null) {
-                setState(() => _gif = gif);
-              }
-            }));
+          if (gif != null) {
+            setState(() => _gif = gif);
+          }
+        },
+      ),
+    );
   }
 }

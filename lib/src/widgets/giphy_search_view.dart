@@ -36,44 +36,56 @@ class _GiphySearchViewState extends State<GiphySearchView> {
   Widget build(BuildContext context) {
     final giphy = GiphyContext.of(context);
 
-    return Column(children: <Widget>[
-      Padding(
+    return Column(
+      children: <Widget>[
+        Padding(
           padding: EdgeInsets.symmetric(horizontal: 10),
           child: TextField(
-              controller: _textController,
-              decoration: InputDecoration(hintText: 'Search Giphy'),
-              onChanged: (value) => _delayedSearch(giphy, value))),
-      Expanded(
+            controller: _textController,
+            decoration: InputDecoration(hintText: 'Search Giphy'),
+            onChanged: (value) => _delayedSearch(giphy, value),
+          ),
+        ),
+        Expanded(
           child: StreamBuilder(
-              stream: _repoController.stream,
-              builder: (BuildContext context,
-                  AsyncSnapshot<GiphyRepository> snapshot) {
-                if (snapshot.hasData) {
-                  return snapshot.data.totalCount > 0
-                      ? NotificationListener(
-                          child: RefreshIndicator(
-                              child: GiphyThumbnailGrid(
-                                  key: Key('${snapshot.data.hashCode}'),
-                                  repo: snapshot.data,
-                                  scrollController: _scrollController),
-                              onRefresh: () =>
-                                  _search(giphy, term: _textController.text)),
-                          onNotification: (n) {
-                            // hide keyboard when scrolling
-                            if (n is UserScrollNotification) {
-                              FocusScope.of(context).requestFocus(FocusNode());
-                            }
-                          },
-                        )
-                      : Center(child: Text('No results'));
-                }
-                return Center(child: CircularProgressIndicator());
-              }))
-    ]);
+            stream: _repoController.stream,
+            builder: (BuildContext context,
+                AsyncSnapshot<GiphyRepository> snapshot) {
+              if (snapshot.hasData) {
+                return snapshot.data.totalCount > 0
+                    ? NotificationListener(
+                        child: RefreshIndicator(
+                          child: GiphyThumbnailGrid(
+                            key: Key('${snapshot.data.hashCode}'),
+                            repo: snapshot.data,
+                            scrollController: _scrollController,
+                          ),
+                          onRefresh: () => _search(
+                            giphy,
+                            term: _textController.text,
+                          ),
+                        ),
+                        onNotification: (n) {
+                          // hide keyboard when scrolling
+                          if (n is UserScrollNotification) {
+                            FocusScope.of(context).requestFocus(FocusNode());
+                          }
+                        },
+                      )
+                    : Center(child: Text('No results'));
+              }
+              return Center(child: CircularProgressIndicator());
+            },
+          ),
+        ),
+      ],
+    );
   }
 
   void _delayedSearch(GiphyContext giphy, String term) => Future.delayed(
-      Duration(milliseconds: 500), () => _search(giphy, term: term));
+        Duration(milliseconds: 500),
+        () => _search(giphy, term: term),
+      );
 
   Future _search(GiphyContext giphy, {String term = ''}) async {
     // skip search if term does not match current search text
@@ -87,13 +99,15 @@ class _GiphySearchViewState extends State<GiphySearchView> {
           ? GiphyRepository.trending(
               apiKey: giphy.apiKey,
               rating: giphy.rating,
-              onError: giphy.onError)
+              onError: giphy.onError,
+            )
           : GiphyRepository.search(
               apiKey: giphy.apiKey,
               query: term,
               rating: giphy.rating,
               lang: giphy.language,
-              onError: giphy.onError));
+              onError: giphy.onError,
+            ));
 
       // scroll up
       if (_scrollController.hasClients) {

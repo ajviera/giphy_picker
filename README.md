@@ -14,8 +14,12 @@ Pick a GIF:
 import 'package:giphy_picker/giphy_picker.dart';
 
 final gif = await GiphyPicker.pickGif(
-                  context: context, 
-                  apiKey: '[YOUR GIPHY APIKEY]');
+  context: context,
+  alertDialogTitle: 'Example',
+  alertDialogMessage: 'An error occurred.',
+  alertDialogClose: "Close",
+  apiKey: '[YOUR GIPHY APIKEY]',
+);
 ```
 
 Display a GIF using the ```GiphyImage``` widget. The following snippet demonstrates how to render a GIF in its original format:
@@ -29,8 +33,9 @@ Alternatively, load and display the GIF image using the ```Image``` widget:
 ```dart
 Widget build(BuildContext context) {
   return Image.network(
-      gif.images.original.url, 
-      headers: {'accept': 'image/*'}))
+    gif.images.original.url,
+    headers: {'accept': 'image/*'},
+  );
 }
 ```
 

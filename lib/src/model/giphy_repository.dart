@@ -21,13 +21,16 @@ class GiphyRepository extends Repository<GiphyGif> {
   GiphyClient _giphyClient;
   int _previewLoad = 0;
 
-  GiphyRepository(
-      {@required String apiKey,
-      @required this.getCollection,
-      this.maxConcurrentPreviewLoad = 4,
-      int pageSize = 25,
-      ErrorListener onError})
-      : super(pageSize: pageSize, onError: onError) {
+  GiphyRepository({
+    @required String apiKey,
+    @required this.getCollection,
+    this.maxConcurrentPreviewLoad = 4,
+    int pageSize = 25,
+    ErrorListener onError,
+  }) : super(
+          pageSize: pageSize,
+          onError: onError,
+        ) {
     assert(getCollection != null);
     assert(maxConcurrentPreviewLoad != null);
     _giphyClient = GiphyClient(apiKey: apiKey, client: _client);
@@ -111,10 +114,14 @@ class GiphyRepository extends Repository<GiphyGif> {
       String rating = GiphyRating.g,
       ErrorListener onError}) async {
     final repo = GiphyRepository(
-        apiKey: apiKey,
-        getCollection: (client, offset, limit) =>
-            client.trending(offset: offset, limit: limit, rating: rating),
-        onError: onError);
+      apiKey: apiKey,
+      getCollection: (client, offset, limit) => client.trending(
+        offset: offset,
+        limit: limit,
+        rating: rating,
+      ),
+      onError: onError,
+    );
 
     // retrieve first page
     await repo.get(0);
@@ -130,10 +137,16 @@ class GiphyRepository extends Repository<GiphyGif> {
       String lang = GiphyLanguage.english,
       ErrorListener onError}) async {
     final repo = GiphyRepository(
-        apiKey: apiKey,
-        getCollection: (client, offset, limit) => client.search(query,
-            offset: offset, limit: limit, rating: rating, lang: lang),
-        onError: onError);
+      apiKey: apiKey,
+      getCollection: (client, offset, limit) => client.search(
+        query,
+        offset: offset,
+        limit: limit,
+        rating: rating,
+        lang: lang,
+      ),
+      onError: onError,
+    );
 
     // retrieve first page
     await repo.get(0);

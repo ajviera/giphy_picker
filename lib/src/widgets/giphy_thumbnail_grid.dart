@@ -16,28 +16,33 @@ class GiphyThumbnailGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
-        padding: EdgeInsets.all(10),
-        controller: scrollController,
-        itemCount: repo.totalCount,
-        itemBuilder: (BuildContext context, int index) => GestureDetector(
-            child: GiphyThumbnail(key: Key('$index'), repo: repo, index: index),
-            onTap: () async {
-              // display preview page
-              final giphy = GiphyContext.of(context);
-              final gif = await repo.get(index);
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (BuildContext context) => GiphyPreviewPage(
-                          gif: gif, onSelected: giphy.onSelected)));
-            }),
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount:
-                MediaQuery.of(context).orientation == Orientation.portrait
-                    ? 2
-                    : 3,
-            childAspectRatio: 1.6,
-            crossAxisSpacing: 5,
-            mainAxisSpacing: 5));
+      padding: EdgeInsets.all(10),
+      controller: scrollController,
+      itemCount: repo.totalCount,
+      itemBuilder: (BuildContext context, int index) => GestureDetector(
+          child: GiphyThumbnail(key: Key('$index'), repo: repo, index: index),
+          onTap: () async {
+            // display preview page
+            final giphy = GiphyContext.of(context);
+            final gif = await repo.get(index);
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (BuildContext context) => GiphyPreviewPage(
+                  gif: gif,
+                  onSelected: giphy.onSelected,
+                ),
+                fullscreenDialog: true,
+              ),
+            );
+          }),
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount:
+            MediaQuery.of(context).orientation == Orientation.portrait ? 2 : 3,
+        childAspectRatio: 1.6,
+        crossAxisSpacing: 5,
+        mainAxisSpacing: 5,
+      ),
+    );
   }
 }
